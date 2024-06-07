@@ -39,7 +39,7 @@ namespace BlueprintStudios.Editor.Tools
             EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
         }
 
-        static void OnPlayModeStateChanged(PlayModeStateChange state)
+        static void OnPlayModeStateChanged(PlayModeStateChange state) 
         {
             bool startServerOnPlay = EditorPrefs.GetBool("BuildAndRun_StartServerOnPlay", false);
             bool stopServerOnStop = EditorPrefs.GetBool("BuildAndRun_StopServerOnStop", false);
@@ -65,6 +65,7 @@ namespace BlueprintStudios.Editor.Tools
 
             if (GUILayout.Button(new GUIContent("Build", "Build Solution"), ToolbarStyles.commandButtonStyle))
             {
+                StopServer();
                 string solutionPath = EditorPrefs.GetString("BuildAndRun_SolutionPath", "");
                 if (string.IsNullOrEmpty(solutionPath))
                 {
@@ -78,6 +79,7 @@ namespace BlueprintStudios.Editor.Tools
 
             if (GUILayout.Button(new GUIContent("Rebuild", "Rebuild Solution"), ToolbarStyles.commandButtonStyle))
             {
+                StopServer();
                 string solutionPath = EditorPrefs.GetString("BuildAndRun_SolutionPath", "");
                 if (string.IsNullOrEmpty(solutionPath))
                 {
@@ -86,7 +88,8 @@ namespace BlueprintStudios.Editor.Tools
                 }
 
                 string solutionDirectory = Path.GetDirectoryName(solutionPath);
-                RunCommand($"dotnet build --no-incremental \"{solutionPath}\"", solutionDirectory, true, redirectOutput: true);
+                RunCommand($"dotnet build --no-incremental \"{solutionPath}\"", solutionDirectory, true,
+                    redirectOutput: true);
             }
 
             if (GUILayout.Button(new GUIContent("Run", "Run Project"), ToolbarStyles.commandButtonStyle))
@@ -189,7 +192,8 @@ namespace BlueprintStudios.Editor.Tools
             }
         }
 
-        private static Process RunCommand(string command, string workingDirectory, bool isBuild, bool redirectOutput = false)
+        private static Process RunCommand(string command, string workingDirectory, bool isBuild,
+            bool redirectOutput = false)
         {
             var processInfo = new ProcessStartInfo("cmd.exe", "/c " + command)
             {
